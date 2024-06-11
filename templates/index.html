@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tumor Detection</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      .container {
+        margin-top: 50px;
+      }
+      .prediction-result {
+        margin-top: 20px;
+      }
+      .uploaded-image {
+        max-width: 300px;
+        margin-top: 20px;
+      }
+      .probabilities {
+        margin-top: 20px;
+      }
+      .list-group-item {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">Tumor Detection</h1>
+      <form method="post" enctype="multipart/form-data" class="mt-4">
+        <div class="form-group">
+          <label for="file">Upload an Image</label>
+          <input
+            type="file"
+            class="form-control-file"
+            id="file"
+            name="file"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Upload</button>
+      </form>
+      {% if result %}
+      <div class="prediction-result text-center">
+        <h2>
+          Prediction Result:
+          <span class="badge badge-success">{{ result }}</span>
+        </h2>
+        <img
+          src="{{ url_for('static', filename='uploads/' + filename) }}"
+          class="img-fluid uploaded-image"
+          alt="Uploaded Image"
+        />
+        <div class="probabilities">
+          <h3>Probabilities:</h3>
+          <ul class="list-group">
+            {% for class, proba in probabilities.items() %}
+            <li class="list-group-item">
+              <span>{{ class }}</span>
+              <span>{{ (proba * 100) | round(2) }}%</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
